@@ -57,3 +57,110 @@ void loop(){
 leerIngreso(1);
   
 }
+
+//metodos//
+
+void leerIngreso(int a){
+ingreso = teclado.getKey();
+  if (ingreso != NO_KEY)
+    switch (ingreso) {
+  	 case 'A': 
+    	if (evaluar(1)==1)
+          correcto();
+    	else{
+    
+              msgError();
+    	}
+    	reset();
+    	break;
+    
+    case 'B':
+      informacion();
+   	 reset();
+   	 break;
+    
+    case 'C':
+    	cambioPass();
+    	reset();
+    	break;
+    
+    case 'D':
+    	cleanlcd();
+  		seguro.write(CERRAR);
+    	lcd.setCursor(0, 0);
+    	lcd.print("Cerrado");
+   		delay(2000);
+    	tone(pinBuzzer, 110);
+        delay(500);
+  		noTone(pinBuzzer);
+   		reset();
+    	break;
+    
+    case '*':
+        lcd.setCursor(0, 0);
+        lcd.print("Presionaste *");
+        delay(2000);
+        reset();
+        break;
+    
+      case '#':
+        lcd.setCursor(0, 0);
+        lcd.print("Presionaste #");
+        delay(2000);
+        reset();
+        break;
+    
+    default:
+    if(a==1){
+    	passUser[i] = ingreso;
+      	printPass(passUser[i], 5 + i, 1);
+    }
+    if(a==2){
+        confirmPass[i] = ingreso;
+        printPass(confirmPass[i], 5 + i, 1);
+        }
+        i++;
+        if (i > 3)
+          i = 0;
+  }
+}
+
+void cleanlcd() {
+  lcd.setCursor(0, 0);
+  lcd.print("                ");
+  lcd.setCursor(0, 1);
+  lcd.print("                ");
+}
+
+void printPass(char a, int columna, int fila){
+	lcd.setCursor(columna, fila);
+  lcd.print(a);
+  delay(100);
+  lcd.setCursor(columna, fila);
+  lcd.print("*");
+}
+
+int evaluar(int a) {
+  int j = 0;
+  if (a==1){
+  for (int i = 0; i <= 3; i++) {
+    if (password[i] == passUser[i]) {
+        j++;
+    }
+  }
+  }
+  if(a==2){
+  for (int i = 0; i <= 3; i++) {
+    if (passUser[i] == confirmPass[i]) {
+        j++;
+    }
+  }
+  }
+  if (j == 4) {
+    return j=1;
+  }
+  else {
+    return j=0;
+  }
+}
+
