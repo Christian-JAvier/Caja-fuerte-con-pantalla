@@ -164,3 +164,132 @@ int evaluar(int a) {
   }
 }
 
+void reset() {
+  lcd.setCursor(0, 0);
+  lcd.print("  **PASSWORD** ");
+  lcd.setCursor(5, 1);
+  lcd.print("____");
+  for(int i =0;i<=3;i++){
+  passUser[i]=NO_KEY;
+  confirmPass[i]=NO_KEY;
+  }
+  i=0;
+}
+
+void msgError(){
+  		tone(pinBuzzer, 260);
+        delay(1000);
+  		noTone(pinBuzzer);
+        lcd.setCursor(0, 0);
+        lcd.print("      ERROR      ");
+        delay(2000);
+  		
+  }
+
+void correcto(){
+  		tone(pinBuzzer, 550);
+        delay(1000);
+  		noTone(pinBuzzer);
+        lcd.setCursor(0, 0);
+        lcd.print("   BIENVENIDO      ");
+        //Abrir servomotor
+        seguro.write(ABRIR);
+        delay(2000);
+  		
+}
+
+  
+void informacion() {
+  lcd.setCursor(0, 0);
+  lcd.print("'A' para introdu");
+  delay(1500);
+  lcd.setCursor(0, 0);
+  lcd.print("cir la pass        ");
+  delay(1500);
+  lcd.setCursor(0, 0);
+  lcd.print("'C' para cambiar");
+  delay(1500);
+  lcd.setCursor(0, 0);
+  lcd.print(" la pass             ");
+  delay(1500);
+}
+
+
+
+void cambioPass() {
+   lcd.setCursor(0, 0);
+  lcd.print("Cambio de pass    ");
+  delay(1500);
+  lcd.setCursor(0, 0);
+  lcd.print("Introduce pass     ");
+  delay(1500);
+  lcd.setCursor(0, 0);
+  lcd.print("anterior        ");
+  delay(1500);  
+  reset();
+   while(passUser[3]==NO_KEY){
+    leerIngreso(1);}
+  if (evaluar(1) == 1) {
+    lcd.setCursor(0, 0);
+    lcd.print("Introduce           ");
+    delay(1500);
+    lcd.setCursor(0, 0);
+    lcd.print("la pass nueva            ");
+    delay(1500);
+    reset();
+    while(passUser[3]==NO_KEY){
+      leerIngreso(1);
+  }
+    lcd.setCursor(0, 0);
+    lcd.print("Vuelve a intro     ");
+    delay(1500);
+    lcd.setCursor(0, 0);
+    lcd.print("cirla           ");
+    delay(1500);    
+    lcd.setCursor(0, 0);
+    lcd.print("  **PASSWORD**      ");
+    lcd.setCursor(5, 1);
+    lcd.print("____");
+    lcd.setCursor(0, 0);
+    i=0;
+    while(confirmPass[3]==NO_KEY){
+      leerIngreso(2);
+  }
+    if(evaluar(2)==1){
+      // funcion de EEPROM
+      for (int i = 0; i <= 3; i++) { 
+         EEPROM.write(i, passUser[i]);
+    }
+      for (int i = 0; i <= 3; i++) { 
+         password[i] = EEPROM.read(i);
+  }
+      lcd.setCursor(0, 0);
+      lcd.print("Contrasena cam  ");
+      delay(2000);
+      lcd.setCursor(0, 0);
+      lcd.print("biada           ");
+      delay(2000);
+    }
+    else{
+      lcd.setCursor(0, 0);
+      lcd.print("Error las pass   ");
+      delay(2000);
+      lcd.setCursor(0, 0);
+      lcd.print("no coinciden        ");
+      delay(2000);
+    }
+    
+  }
+  else {
+    msgError();
+  }
+  reset();
+}
+
+void passChange(){
+ for(int i=0;i<=3;i++){
+   password[i]=passUser[i];
+ }
+  
+}
+
